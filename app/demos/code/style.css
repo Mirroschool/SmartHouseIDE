@@ -73,6 +73,7 @@ h1 {
   border: 1px solid #ccc;
   border-bottom: none;
 }
+
 td.tabon {
   border-bottom-color: #ddd !important;
   background-color: #ddd;
@@ -90,11 +91,34 @@ td.tabmin {
   border-left-style: none !important;
   border-right-style: none !important;
 }
+
+td.tab_upload{
+  border-top-style: none !important;
+  border-left-style: none !important;
+  border-right-style: none !important;
+  padding: 0 30px;
+}
+
+td.tab_upload select{
+  padding: 5px 19px;
+}
+
+td.tab_upload button{
+  width: 25px;
+}
+
+.blocklyToolboxDiv{
+  width: 220px;
+}
+
+#tab_blocks {
+  width: 180px;
+}
+
 td.tabmax {
   border-top-style: none !important;
   border-left-style: none !important;
   border-right-style: none !important;
-  width: 99%;
   padding-left: 10px;
   padding-right: 10px;
   text-align: right;

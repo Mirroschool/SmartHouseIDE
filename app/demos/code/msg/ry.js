@@ -67,6 +67,8 @@ var MSG = {
   catDivers:"Основные циклы",
   title: "Русский",
   blocks: "Блоки",
+  verifyTooltip: "Verify sketch",
+  uploadTooltip: "Upload sketch",
   linkTooltip: "Сохранить и связать с блоками.",
   runTooltip: "Сохранить в формате ino",
   saveXMLTooltip:"Сохранить XML",

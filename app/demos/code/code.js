@@ -40,13 +40,13 @@ Code.workspace = null;
 
 
 
-Code.getStringParamFromUrl = function(name, defaultValue) {
+Code.getStringParamFromUrl = function (name, defaultValue) {
   var val = location.search.match(new RegExp('[?&]' + name + '=([^&]+)'));
   return val ? decodeURIComponent(val[1].replace(/\+/g, '%20')) : defaultValue;
 };
 
 
-Code.getLang = function() {
+Code.getLang = function () {
   var lang = Code.getStringParamFromUrl('lang', '');
   if (Code.LANGUAGE_NAME[lang] === undefined) {
     // Default to rus
@@ -56,15 +56,15 @@ Code.getLang = function() {
 };
 
 
-Code.isRtl = function() {
+Code.isRtl = function () {
   return Code.LANGUAGE_RTL.indexOf(Code.LANG) != -1;
 };
 
 
-Code.loadBlocks = function(defaultXml) {
+Code.loadBlocks = function (defaultXml) {
   try {
     var loadOnce = window.sessionStorage.loadOnceBlocks;
-  } catch(e) {
+  } catch (e) {
     // Firefox sometimes throws a SecurityError when accessing sessionStorage.
     // Restarting Firefox fixes this, so it looks like a bug.
     var loadOnce = null;
@@ -89,7 +89,7 @@ Code.loadBlocks = function(defaultXml) {
 };
 
 
-Code.changeLanguage = function() {
+Code.changeLanguage = function () {
   // Store the blocks for the duration of the reload.
   // This should be skipped for the index page, which has no blocks and does
   // not load Blockly.
@@ -102,7 +102,7 @@ Code.changeLanguage = function() {
 
   var languageMenu = document.getElementById('languageMenu');
   var newLang = encodeURIComponent(
-      languageMenu.options[languageMenu.selectedIndex].value);
+    languageMenu.options[languageMenu.selectedIndex].value);
   var search = window.location.search;
   if (search.length <= 1) {
     search = '?lang=' + newLang;
@@ -113,11 +113,11 @@ Code.changeLanguage = function() {
   }
 
   window.location = window.location.protocol + '//' +
-      window.location.host + window.location.pathname + search;
+    window.location.host + window.location.pathname + search;
 };
 
 
-Code.bindClick = function(el, func) {
+Code.bindClick = function (el, func) {
   if (typeof el == 'string') {
     el = document.getElementById(el);
   }
@@ -126,7 +126,7 @@ Code.bindClick = function(el, func) {
 };
 
 
-Code.importPrettify = function() {
+Code.importPrettify = function () {
   //<link rel="stylesheet" href="../prettify.css">
   //<script src="../prettify.js"></script>
   var link = document.createElement('link');
@@ -139,7 +139,7 @@ Code.importPrettify = function() {
 };
 
 
-Code.getBBox_ = function(element) {
+Code.getBBox_ = function (element) {
   var height = element.offsetHeight;
   var width = element.offsetWidth;
   var x = 0;
@@ -166,7 +166,7 @@ Code.TABS_ = ['blocks', 'arduino', 'xml'];
 Code.selected = 'blocks';
 
 
-Code.tabClick = function(clickedName) {
+Code.tabClick = function (clickedName) {
   // If the XML tab was open, save and render the content.
   if (document.getElementById('tab_xml').className == 'tabon') {
     var xmlTextarea = document.getElementById('content_xml');
@@ -176,7 +176,7 @@ Code.tabClick = function(clickedName) {
       xmlDom = Blockly.Xml.textToDom(xmlText);
     } catch (e) {
       var q =
-          window.confirm(MSG['badXml'].replace('%1', e));
+        window.confirm(MSG['badXml'].replace('%1', e));
       if (!q) {
         // Leave the user on the XML tab.
         return;
@@ -197,35 +197,35 @@ Code.tabClick = function(clickedName) {
     document.getElementById('tab_' + name).className = 'taboff';
     document.getElementById('content_' + name).style.visibility = 'hidden';
   }
-  
-   Code.selected = clickedName;
-   
-   
-//ADEL WARNING
-var warningText;
- if (Code.selected == 'arduino') {
+
+  Code.selected = clickedName;
+
+
+  //ADEL WARNING
+  var warningText;
+  if (Code.selected == 'arduino') {
     // Check for bad block configurations that make it unlikely that
     // the resulting code is correct.
     var badBlock = Blockly.Arduino.getUnconnectedBlock();
     //alert(badBlock);
     if (badBlock) {
       warningText = MSG['warningBadBlock'];
-      
+
     } else {
       badBlock = Blockly.Arduino.getBlockWithWarning();
       if (badBlock) {
-       warningText = MSG['warningPleaseFix'];
+        warningText = MSG['warningPleaseFix'];
       }
-   }
-   
+    }
+
 
     if (badBlock) {
       // Go to blocks pane.
       //Code.displayTab('tab_blocks');
-      
+
       Code.selected = 'blocks';
       clickedName = 'blocks';
-      
+
       // Pop up warning dialog, making an offending block blink.
       // If they close the dialog with "OK", they remain in the blocks pane.
       // If they choose the other option ("generate Lua anyway"), the fake
@@ -234,35 +234,35 @@ var warningText;
         left: '25%',
         top: '5em'
       };
-      
+
       document.getElementById('badBlockMsg').innerHTML = warningText;
       BlocklyApps.showDialog(document.getElementById('badBlockDiv'), null,
-                             false, true, style, BlocklyApps.stopDialogKeyDown);
+        false, true, style, BlocklyApps.stopDialogKeyDown);
       BlocklyApps.startDialogKeyDown();
-     
-      var blink = function() {
+
+      var blink = function () {
         badBlock.select();
         if (BlocklyApps.isDialogVisible_) {
-          window.setTimeout(function() {badBlock.unselect();}, 150);
+          window.setTimeout(function () { badBlock.unselect(); }, 150);
           window.setTimeout(blink, 300);
         }
       };
       blink();
-    
+
     }
   }
-//
+  //
 
 
 
-  
-    // Select the active tab.
- 
- 
+
+  // Select the active tab.
+
+
   document.getElementById('tab_' + clickedName).className = 'tabon';
   // Show the selected pane.
   document.getElementById('content_' + clickedName).style.visibility =
-      'visible';
+    'visible';
   Code.renderContent();
   if (clickedName == 'blocks') {
     Code.workspace.setVisible(true);
@@ -271,7 +271,7 @@ var warningText;
 };
 
 
-Code.renderContent = function() {
+Code.renderContent = function () {
   var content = document.getElementById('content_' + Code.selected);
   // Initialize the pane.
   if (content.id == 'content_xml') {
@@ -316,32 +316,34 @@ Code.renderContent = function() {
 };
 
 
-Code.yes = function() {
-    var ko = Code.workspace.getAllBlocksADEL();
-    var myb = Code.workspace.getAllBlocks();
-    
-    document.getElementById('capacity').innerHTML = Code.workspace.getAllBlocks();
-	document.getElementById('test').innerHTML = ko.length - 1;
-    
-/*   //
-    var toolbox = '<xml id="toolbox" >';
-      toolbox += '<category id="catInOut" colour="10">';
-  toolbox += '   <block type="inout_digital_read"></block>';
-  toolbox += '   <block type="inout_analog_read"></block>';
-        toolbox += '</category>';
-  toolbox += '</xml>';
-   if (ko.length>2){
-       //Code.workspace.updateToolbox(toolbox);
-   }
-    //*/
+Code.yes = function () {
+  var ko = Code.workspace.getAllBlocksADEL();
+  var myb = Code.workspace.getAllBlocks();
+
+  document.getElementById('capacity').innerHTML = Code.workspace.getAllBlocks();
+  document.getElementById('test').innerHTML = ko.length - 1;
+
+  /*   //
+      var toolbox = '<xml id="toolbox" >';
+        toolbox += '<category id="catInOut" colour="10">';
+    toolbox += '   <block type="inout_digital_read"></block>';
+    toolbox += '   <block type="inout_analog_read"></block>';
+          toolbox += '</category>';
+    toolbox += '</xml>';
+     if (ko.length>2){
+         //Code.workspace.updateToolbox(toolbox);
+     }
+      //*/
 }
 
-Code.init = function() {
+Code.init = function () {
   Code.initLanguage();
-  var RTL=Code.isRtl();
+  Code.initSketchUpload();
+
+  var RTL = Code.isRtl();
   rtl = Code.isRtl();
   var container = document.getElementById('content_area');
-  var onresize = function(e) {
+  var onresize = function (e) {
     var bBox = Code.getBBox_(container);
     for (var i = 0; i < Code.TABS_.length; i++) {
       var el = document.getElementById('content_' + Code.TABS_[i]);
@@ -357,8 +359,8 @@ Code.init = function() {
     // Make the 'Blocks' tab line up with the toolbox.
     if (Code.workspace && Code.workspace.toolbox_.width) {
       document.getElementById('tab_blocks').style.minWidth =
-          (Code.workspace.toolbox_.width - 38) + 'px';
-          // Account for the 19 pixel margin and on each side.
+        (Code.workspace.toolbox_.width - 38) + 'px';
+      // Account for the 19 pixel margin and on each side.
     }
   };
   onresize();
@@ -366,44 +368,49 @@ Code.init = function() {
 
   var toolbox = document.getElementById('toolbox');
   Code.workspace = Blockly.inject('content_blocks',
-      {grid:
-          {spacing: 25,
-           length: 3,
-           colour: '#ccc',
-           snap: true},
-       media: '../../media/',
-       rtl: rtl,
-       toolbox: toolbox,
-       zoom:
-           {controls: true,
-            wheel: true}
-      });
-//ADEL
-Code.workspace.addChangeListener(Code.yes);
+    {
+      grid:
+      {
+        spacing: 25,
+        length: 3,
+        colour: '#ccc',
+        snap: true
+      },
+      media: '../../media/',
+      rtl: rtl,
+      toolbox: toolbox,
+      zoom:
+      {
+        controls: true,
+        wheel: true
+      }
+    });
+  //ADEL
+  Code.workspace.addChangeListener(Code.yes);
 
-// Copier coller
-function onchange(event) {
-      //var content2 = document.getElementById("fool");
-      //var code;
-      //code = Blockly.Arduino.workspaceToCode(Code.workspace);
-      //code = prettyPrintOne(code, 'arduino');
-      //content2.textContent = code;
-           //alert("changement");
-            //code = Blockly.Arduino.workspaceToCode(Code.workspace);
-            //content.textContent = code;
-          document.getElementById('fool').value = Blockly.Arduino.workspaceToCode(Code.workspace);
-            //document.getElementById('foo').innerHTML = Code.workspace.Numberallblock();
-        }
-Code.workspace.addChangeListener(onchange);
+  // Copier coller
+  function onchange(event) {
+    //var content2 = document.getElementById("fool");
+    //var code;
+    //code = Blockly.Arduino.workspaceToCode(Code.workspace);
+    //code = prettyPrintOne(code, 'arduino');
+    //content2.textContent = code;
+    //alert("changement");
+    //code = Blockly.Arduino.workspaceToCode(Code.workspace);
+    //content.textContent = code;
+    document.getElementById('fool').value = Blockly.Arduino.workspaceToCode(Code.workspace);
+    //document.getElementById('foo').innerHTML = Code.workspace.Numberallblock();
+  }
+  Code.workspace.addChangeListener(onchange);
 
 
   // Add to reserved word list: Local variables in execution environment (runJS)
   // and the infinite loop detection function.
   Blockly.JavaScript.addReservedWords('code,timeouts,checkTimeout');
-var mystartfile;
-mystartfile= '<xml xmlns="http://www.w3.org/1999/xhtml">';
-mystartfile +=  '<block type="arduino_setup" x="0" y="0"></block>';
-mystartfile += '</xml>';
+  var mystartfile;
+  mystartfile = '<xml xmlns="http://www.w3.org/1999/xhtml">';
+  mystartfile += '<block type="arduino_setup" x="0" y="0"></block>';
+  mystartfile += '</xml>';
   Code.loadBlocks(mystartfile);
 
   if ('BlocklyStorage' in window) {
@@ -414,7 +421,7 @@ mystartfile += '</xml>';
   Code.tabClick(Code.selected);
 
   Code.bindClick('trashButton',
-      function() {Code.discard(); Code.renderContent();});
+    function () { Code.discard(); Code.renderContent(); });
   Code.bindClick('runButton', Code.runJS);
   // Disable the link button if page isn't backed by App Engine storage.
   var linkButton = document.getElementById('linkButton');
@@ -424,7 +431,7 @@ mystartfile += '</xml>';
     BlocklyStorage['HASH_ERROR'] = MSG['hashError'];
     BlocklyStorage['XML_ERROR'] = MSG['xmlError'];
     Code.bindClick(linkButton,
-        function() {BlocklyStorage.link(Code.workspace);});
+      function () { BlocklyStorage.link(Code.workspace); });
   } else if (linkButton) {
     linkButton.className = 'disabled';
   }
@@ -432,7 +439,7 @@ mystartfile += '</xml>';
   for (var i = 0; i < Code.TABS_.length; i++) {
     var name = Code.TABS_[i];
     Code.bindClick('tab_' + name,
-        function(name_) {return function() {Code.tabClick(name_);};}(name));
+      function (name_) { return function () { Code.tabClick(name_); }; }(name));
   }
 
   // Lazy-load the syntax-highlighting.
@@ -440,7 +447,7 @@ mystartfile += '</xml>';
 };
 
 
-Code.initLanguage = function() {
+Code.initLanguage = function () {
   // Set the HTML's language and direction.
   var rtl = Code.isRtl();
   document.dir = rtl ? 'rtl' : 'ltr';
@@ -451,7 +458,7 @@ Code.initLanguage = function() {
   for (var lang in Code.LANGUAGE_NAME) {
     languages.push([Code.LANGUAGE_NAME[lang], lang]);
   }
-  var comp = function(a, b) {
+  var comp = function (a, b) {
     // Sort based on first argument ('English', 'Русский', '简体字', etc).
     if (a[0] > b[0]) return 1;
     if (a[0] < b[0]) return -1;
@@ -477,17 +484,20 @@ Code.initLanguage = function() {
   //document.getElementById('title').textContent = MSG['title'];
   document.getElementById('tab_blocks').textContent = MSG['blocks'];
 
+  document.getElementById('verifyButton').title = MSG['verifyTooltip'];
+  document.getElementById('uploadButton').title = MSG['uploadTooltip'];
+
   document.getElementById('linkButton').title = MSG['linkTooltip'];
   document.getElementById('runButton').title = MSG['runTooltip'];
   document.getElementById('trashButton').title = MSG['trashTooltip'];
-  
-  document.getElementById('savexmlButton').title = MSG['saveXMLTooltip']; 
-  document.getElementById('fakeload').title = MSG['loadXMLTooltip']; 
+
+  document.getElementById('savexmlButton').title = MSG['saveXMLTooltip'];
+  document.getElementById('fakeload').title = MSG['loadXMLTooltip'];
   document.getElementById('copyButton').title = MSG['copycodeTooltip'];
 
-  var categories = ['xStepper','leonardo','catInOut','catSerialAll','catSerial','catSerial1','catSoftSerial','catBTAll','catBTSerial1','catBTSoftSerial','catMotors','catMotorMRT','catServo','catSimpleSensorsALL','catSimpleSensors','catSimpleSensors2','catSimpleSensors3','catSimpleActuators','catSerialLCDm','catSerialLCDmb23','catSerialLCDmb2','catSerialLCD_I2C','minicatSerialLCD_I2C','catDisplay','catADXL345','catHMC5883','bmpcatHMC5883','catDigital','catAnalog', 
-                    'catString','catDivers','catInterruptExt','catStorage','catMAX7219_7D','catMAX7219_LM','catEEprom','catStepper','catStepper28BYJ','catRTCDS3231','catRTCDS1302','catLedStrip','catTM1637','catLogic','catLoops','catTime','catGenericTime', 'catMath', 'catText','catRotaryEncoder','ibuttonds1990','catGPS','catAllVar','catVariables', 'catFunctions','catRemoteIR','catKeypad',
-					'catOtherSensors','catRFID','catr433','catRadioTEA5767','catCommunication','catDFPlayerMP3','catmicroSD','catAPDS9960','catWIFISerial1','catWIFISoftSerial','catOtherActuators','catWIFI','catIOT','catMQTTWifi','catRF24L01','catRF','catTCS3200','catCamera','catds18b20','catST7735','catServoRot','stepcatServoRot','catArray','nminicatSerialLCD_I2C','catST2046','fingerprinting','tensorsensor','electrocardiography'];
+  var categories = ['xStepper', 'leonardo', 'catInOut', 'catSerialAll', 'catSerial', 'catSerial1', 'catSoftSerial', 'catBTAll', 'catBTSerial1', 'catBTSoftSerial', 'catMotors', 'catMotorMRT', 'catServo', 'catSimpleSensorsALL', 'catSimpleSensors', 'catSimpleSensors2', 'catSimpleSensors3', 'catSimpleActuators', 'catSerialLCDm', 'catSerialLCDmb23', 'catSerialLCDmb2', 'catSerialLCD_I2C', 'minicatSerialLCD_I2C', 'catDisplay', 'catADXL345', 'catHMC5883', 'bmpcatHMC5883', 'catDigital', 'catAnalog',
+    'catString', 'catDivers', 'catInterruptExt', 'catStorage', 'catMAX7219_7D', 'catMAX7219_LM', 'catEEprom', 'catStepper', 'catStepper28BYJ', 'catRTCDS3231', 'catRTCDS1302', 'catLedStrip', 'catTM1637', 'catLogic', 'catLoops', 'catTime', 'catGenericTime', 'catMath', 'catText', 'catRotaryEncoder', 'ibuttonds1990', 'catGPS', 'catAllVar', 'catVariables', 'catFunctions', 'catRemoteIR', 'catKeypad',
+    'catOtherSensors', 'catRFID', 'catr433', 'catRadioTEA5767', 'catCommunication', 'catDFPlayerMP3', 'catmicroSD', 'catAPDS9960', 'catWIFISerial1', 'catWIFISoftSerial', 'catOtherActuators', 'catWIFI', 'catIOT', 'catMQTTWifi', 'catRF24L01', 'catRF', 'catTCS3200', 'catCamera', 'catds18b20', 'catST7735', 'catServoRot', 'stepcatServoRot', 'catArray', 'nminicatSerialLCD_I2C', 'catST2046', 'fingerprinting', 'tensorsensor', 'electrocardiography'];
   for (var i = 0, cat; cat = categories[i]; i++) {
     document.getElementById(cat).setAttribute('name', MSG[cat]);
   }
@@ -502,10 +512,10 @@ Code.initLanguage = function() {
 };
 
 
-Code.runJS = function() {
+Code.runJS = function () {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = '  checkTimeout();\n';
   var timeouts = 0;
-  var checkTimeout = function() {
+  var checkTimeout = function () {
     if (timeouts++ > 1000000) {
       throw MSG['timeout'];
     }
@@ -520,23 +530,23 @@ Code.runJS = function() {
 };
 
 
-Code.discard = function() {
+Code.discard = function () {
   var count = Code.workspace.getAllBlocks().length;
   if (count < 2 ||
-      window.confirm(MSG['discard'].replace('%1', count))) {
+    window.confirm(MSG['discard'].replace('%1', count))) {
     Code.workspace.clear();
     window.location.hash = '';
   }
 };
 
 //ADEL FOR WARNING
-Code.stopDialogKeyDown = function() {
+Code.stopDialogKeyDown = function () {
   document.body.removeEventListener('keydown',
-      BlocklyApps.dialogKeyDown_, true);
+    BlocklyApps.dialogKeyDown_, true);
 };
 
-Code.showDialog = function(content, origin, animate, modal, style,
-                                  disposeFunc) {
+Code.showDialog = function (content, origin, animate, modal, style,
+  disposeFunc) {
   if (Code.isDialogVisible_) {
     BlocklyApps.hideDialog(false);
   }
@@ -546,7 +556,7 @@ Code.showDialog = function(content, origin, animate, modal, style,
   var dialog = document.getElementById('dialog');
   var shadow = document.getElementById('dialogShadow');
   var border = document.getElementById('dialogBorder');
-  
+
 
 
   // Copy all the specified styles to the dialog.
@@ -560,8 +570,8 @@ Code.showDialog = function(content, origin, animate, modal, style,
     header.id = 'dialogHeader';
     dialog.appendChild(header);
     BlocklyApps.dialogMouseDownWrapper_ =
-        Blockly.bindEvent_(header, 'mousedown', null,
-                           BlocklyApps.dialogMouseDown_);
+      Blockly.bindEvent_(header, 'mousedown', null,
+        BlocklyApps.dialogMouseDown_);
   }
   dialog.appendChild(content);
   content.className = content.className.replace('dialogHiddenContent', '');
@@ -584,6 +594,44 @@ Code.showDialog = function(content, origin, animate, modal, style,
     endResult();
   }
 };
+
+// 
+function fillComportSelect(comports) {
+  var comportSelect = document.getElementById('comport_select');
+  comportSelect.innerHTML = "";
+
+  comports.forEach(function (comport) {
+    var comportOption = document.createElement("option");
+    comportOption.text = comport.title.substring(0, 25);
+    comportOption.value = comport.id;
+    comportSelect.appendChild(comportOption);
+  })
+}
+
+function verifySketch(){
+  var code = Blockly.Arduino.workspaceToCode(Code.workspace);
+  console.log(code);
+}
+
+function uploadSketch(){
+  var code = Blockly.Arduino.workspaceToCode(Code.workspace);
+  console.log(code);
+}
+
+Code.initSketchUpload = function () {
+  var verifyButton = document.getElementById('verifyButton');
+  var uploadButton = document.getElementById('uploadButton');
+
+  verifyButton.addEventListener("click", verifySketch);
+  uploadButton.addEventListener("click", uploadSketch); 
+
+  setInterval(function () {
+    fetch('https://jsonplaceholder.typicode.com/albums')
+      .then(response => response.json())
+      .then(json => fillComportSelect(json))
+  }, 5000);
+}
+
 
 //
 

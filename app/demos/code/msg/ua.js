@@ -67,6 +67,8 @@ var MSG = {
   catDivers:"Основні цикли",
   title: "Українська",
   blocks: "Блоки",
+  verifyTooltip: "Перевірити код на помилки",
+  uploadTooltip: "Завантажити код на Arduino",
   linkTooltip: "Зберегти та зв'язати з блоками.",
   runTooltip: "Зберегти у форматі ino",
   saveXMLTooltip:"Зберегти XML",
